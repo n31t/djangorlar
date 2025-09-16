@@ -1,0 +1,1 @@
+Djangorlar simple project for education
