@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Counter</title>
+    <style>
+        body {
+            font-family: Times;
+            background-color: white;
+            margin: 20px;
+        }
+        .counter-box {
+            border: 3px solid black;
+            padding: 30px;
+            width: 200px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .counter-number {
+            font-size: 48px;
+            font-weight: bold;
+        }
+        button {
+            background-color: #ddd;
+            border: 2px solid black;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'welcome' %}">← Back</a>
+    
+    <h1>Counter</h1>
+    
+    <div class="counter-box">
+        <div>Count:</div>
+        <div class="counter-number" id="counter-value">{{ counter }}</div>
+    </div>
+    
+    <button onclick="incrementCounter()">+ Add 1</button>
+    <button onclick="resetCounter()">Reset to 0</button>
+    
+    <script>
+        function incrementCounter() {
+            fetch('{% url "counter_increment" %}', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('counter-value').textContent = data.counter;
+            })
+            .catch(error => {
+                alert('Error: ' + error);
+            });
+        }
+        function resetCounter() {
+            if (confirm('Reset counter to 0?')) {
+                fetch('{% url "counter_reset" %}', {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('counter-value').textContent = data.counter;
+                })
+                .catch(error => {
+                    alert('Error: ' + error);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

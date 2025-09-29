@@ -1,22 +1,26 @@
-"""
-URL configuration for djangorlar project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path
 
+from apps.tasks.views import (
+    welcome_view,
+    users_view,
+    city_time_view,
+    counter_view,
+    counter_increment,
+    counter_reset,
+    get_time_api,
+    hello_name_view
+)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', welcome_view, name='welcome'),
+    path('users/', users_view, name='users'),
+    path('city-time/', city_time_view, name='city_time'),
+    path('cnt/', counter_view, name='counter'),
+    path('cnt/increment/', counter_increment, name='counter_increment'),
+    path('cnt/reset/', counter_reset, name='counter_reset'),
+    path('api/time/', get_time_api, name='get_time_api'),
+    # Legacy route
+    path('hello/', hello_name_view, name='hello_name_view')
 ]

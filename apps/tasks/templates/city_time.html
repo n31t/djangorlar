@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>City Time</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f5f5f5;
+            margin: 20px;
+        }
+        .time-display {
+            border: 2px solid black;
+            padding: 20px;
+            margin: 20px 0;
+            background-color: white;
+        }
+        .cities {
+            margin: 20px 0;
+        }
+        .cities a {
+            margin-right: 10px;
+            padding: 5px;
+            background-color: #ccc;
+            color: black;
+            text-decoration: none;
+            border: 1px solid #999;
+        }
+        .cities a:hover {
+            background-color: #bbb;
+        }
+        .active {
+            background-color: #999 !important;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'welcome' %}">← Back</a>
+    
+    <h1>City Time</h1>
+    
+    <div class="time-display">
+        <h2 id="current-city">{{ selected_city }}</h2>
+        <p>Current time: <span id="current-time">{{ current_time|date:"H:i:s" }}</span></p>
+        <p>Date: <span id="current-date">{{ current_time|date:"Y-m-d" }}</span></p>
+        <p><small>Status: <span id="status">Live</span></small></p>
+    </div>
+
+    <div class="cities">
+        <strong>Select city:</strong><br><br>
+        {% for city, timezone in cities.items %}
+        <a href="?city={{ city }}" {% if city == selected_city %}class="active"{% endif %} onclick="currentCity='{{ city }}'">
+            {{ city }}
+        </a>
+        {% endfor %}
+    </div>
+    
+    <button onclick="updateTime()">Manual Refresh</button>
+    
+    <script>
+        let currentCity = '{{ selected_city }}';
+        let isUpdating = false;
+        
+        function updateTime() {
+            if (isUpdating) return;
+            isUpdating = true;
+            document.getElementById('status').textContent = 'Updating...';
+            
+            fetch('/api/time/?city=' + currentCity)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('current-time').textContent = data.time;
+                    document.getElementById('current-date').textContent = data.date;
+                    document.getElementById('current-city').textContent = data.city;
+                    document.getElementById('status').textContent = 'Live';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('status').textContent = 'Error';
+                })
+                .finally(() => {
+                    isUpdating = false;
+                });
+        }
+        setInterval(updateTime, 1000);
+        setTimeout(updateTime, 500);
+    </script>
+</body>
+</html>

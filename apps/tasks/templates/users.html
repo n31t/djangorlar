@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Users</title>
+    <style>
+        body {
+            font-family: Times;
+            background-color: white;
+            margin: 20px;
+        }
+        .back {
+            color: blue;
+            text-decoration: underline;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #dddddd;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'welcome' %}" class="back">← Back</a>
+    
+    <h1>Users List</h1>
+    <p>Total users: {{ users|length }}</p>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Email</th>
+        </tr>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.full_name }}</td>
+            <td>{{ user.age }}</td>
+            <td>{{ user.email }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">No users found</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
