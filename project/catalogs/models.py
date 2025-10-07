@@ -1,6 +1,5 @@
 from django.db import models
 
-# In catalogs you should have: Restaurant — a restaurant that sells items. One restaurant has many menu items. MenuItem — a dish belonging to a single restaurant. Has a base price and availability. Category — groups like “Pizza”, “Drinks” ItemCategory (through-table) — many-to-many between MenuItem and Category, with an extra position field to control item ordering inside a category. Option — selectable add-on or variant (e.g., “Large”, “Extra cheese”). ItemOption (through-table) — many-to-many between MenuItem and Option, with extra fields such as price_delta (price adjustment for the option) and is_default (whether it’s preselected).
 class Restaurant(models.Model):
     name = models.CharField(max_length=255)
     address = models.CharField(max_length=255)

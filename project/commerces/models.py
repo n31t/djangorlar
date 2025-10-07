@@ -1,7 +1,5 @@
 from django.db import models
 
-# In commerces you should have: Address: user’s saved delivery addresses. Address — a user’s saved delivery address (one user can have many addresses). Order — a purchase placed by a user for one restaurant and delivered to one address. Includes simple status (e.g., new/confirmed/delivering/done) and totals (subtotal, discount_total, total). OrderItem — a snapshot of a MenuItem inside the order (stores item name/price at the moment of purchase, plus quantity and line_total). OrderItemOption — selected options for each order item (stores option name and price_delta snapshot). PromoCode — a discount code (unique). OrderPromo (through-table) — many-to-many between Order and PromoCode, with extra applied_amount to record the actual discount used.
-
 class Address(models.Model):
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='addresses')
     street = models.CharField(max_length=255)
