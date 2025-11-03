@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counter - Django App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .back-button:hover {
+            background-color: #5a6268;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .counter-display {
+            background-color: #f8f9fa;
+            padding: 40px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border: 3px solid #007bff;
+        }
+        .counter-value {
+            font-size: 4em;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 15px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-increment {
+            background-color: #28a745;
+            color: white;
+        }
+        .btn-increment:hover {
+            background-color: #218838;
+        }
+        .btn-reset {
+            background-color: #dc3545;
+            color: white;
+        }
+        .btn-reset:hover {
+            background-color: #c82333;
+        }
+        .instructions {
+            margin-top: 30px;
+            color: #666;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{% url 'home' %}" class="back-button">← Back to Home</a>
+        <h1>🔢 Counter</h1>
+        
+        <div class="counter-display">
+            <div class="counter-value">{{ counter }}</div>
+        </div>
+        
+        <div class="button-group">
+            <form method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-increment" name="increment">+ Increment</button>
+                <button type="submit" class="btn btn-reset" name="reset">Reset</button>
+            </form>
+        </div>
+        
+        <div class="instructions">
+            <p>Click the <strong>Increment</strong> button to increase the counter by 1.</p>
+            <p>Click the <strong>Reset</strong> button to reset the counter to 0.</p>
+        </div>
+    </div>
+</body>
+</html>

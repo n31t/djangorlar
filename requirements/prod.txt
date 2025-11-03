@@ -1,1 +1,5 @@
--r local.txt
+asgiref==3.9.1
+Django==5.2.6
+python-decouple==3.8
+pytz==2024.1
+sqlparse==0.5.3
