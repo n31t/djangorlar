@@ -6,7 +6,6 @@ with authentication, retry logic, and response handling.
 """
 
 import time
-import json
 from typing import Dict, Any, Optional, List, Callable
 from urllib.parse import urljoin, urlencode
 from dataclasses import dataclass
@@ -31,7 +30,7 @@ class HTTPMethod(Enum):
 @dataclass
 class RequestConfig:
     """Configuration for API requests."""
-    timeout: int = 30
+    timeout: int = 60
     max_retries: int = 3
     retry_delay: float = 1.0
     verify_ssl: bool = True
