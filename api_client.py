@@ -30,7 +30,7 @@ class HTTPMethod(Enum):
 @dataclass
 class RequestConfig:
     """Configuration for API requests."""
-    timeout: int = 40
+    timeout: int = 60
     max_retries: int = 3
     retry_delay: float = 1.0
     verify_ssl: bool = True
