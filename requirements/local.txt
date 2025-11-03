@@ -1,1 +1,34 @@
--r prod.txt
+# Django Project Requirements
+# Core Django framework
+Django==5.0
+
+# ASGI support for Django
+asgiref==3.9.1
+
+# Environment variable management
+python-dotenv==1.1.1
+
+# SQL parsing utilities
+sqlparse==0.5.3
+
+# Timezone support
+pytz==2025.2
+
+# Additional recommended packages for Django development
+# Database adapter for PostgreSQL (if needed later)
+# psycopg2-binary==2.9.7
+
+# Django REST Framework (if building APIs)
+# djangorestframework==3.14.0
+
+# Django CORS headers (for frontend integration)
+# django-cors-headers==4.3.1
+
+# Pillow for image handling (if using ImageField)
+# Pillow==10.0.1
+
+# Django Debug Toolbar (development only)
+# django-debug-toolbar==4.2.0
+
+# Whitenoise for static file serving
+# whitenoise==6.6.0
