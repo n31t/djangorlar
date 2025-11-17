@@ -10,6 +10,9 @@ User = get_user_model()
 
 
 class Command(BaseCommand):
+    """
+    Generate test data for users app
+    """
     help = 'Generate test data for users app'
 
     def add_arguments(self, parser):

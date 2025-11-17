@@ -13,6 +13,9 @@ CustomUser = get_user_model()
 
 
 class Command(BaseCommand):
+    """
+    Test all 50 CustomUser queries
+    """
     help = 'Test all 50 CustomUser queries'
 
     def __init__(self, *args, **kwargs):
