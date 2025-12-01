@@ -1,0 +1,1 @@
+https://github.com/diasjakupov/django-practice-2/tree/practice-7-orm

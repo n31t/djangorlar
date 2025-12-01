@@ -1,175 +1,178 @@
+# Python modules
 from typing import Any
 
+# Django modules
 from django.db.models import (
     EmailField,
     CharField,
     BooleanField,
     DateField,
-    DecimalField,
-    DateTimeField,
+    DecimalField
 )
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-from django.utils import timezone
+
+# Project modules
+from abstract.models import AbstractBaseModel
+
+
 
 class CustomUserManager(BaseUserManager):
-    """
-    Custom user model manager for db
-    """
-    def __obtain_user_instance(self, email: str, full_name:str, password: str, **kwargs: dict[str, Any]) -> 'CustomUser':
-        """Get user instance by email and password"""
+    """Custom User Manager to make database requests."""
+
+    def __obtain_user_instance(
+        self,
+        email: str,
+        full_name: str,
+        password: str,
+        **kwargs: dict[str, Any],
+    ) -> 'CustomUser':
+        """Get user instance."""
         if not email:
-            raise ValidationError(message="Email is required", code="email_required")
+            raise ValidationError(
+                message="Email field is required", code="email_empty"
+            )
         if not full_name:
-            raise ValidationError(message="Full name is required", code="full_name_required")
-        if not password:
-            raise ValidationError(message="Password is required", code="password_required")
+            raise ValidationError(
+                message="Full name name is required.", code="full_name_empty"
+            )
+
         new_user: 'CustomUser' = self.model(
-            email = self.normalize_email(email),
-            full_name = full_name,
-            password = password,
-            **kwargs
+            email=self.normalize_email(email),
+            full_name=full_name,
+            password=password,
+            **kwargs,
         )
         return new_user
-    
+
     def create_user(
         self,
         email: str,
         full_name: str,
         password: str,
-        **kwargs: dict[str, Any]
+        **kwargs: dict[str, Any],
     ) -> 'CustomUser':
-        """Create and save a user with the given email and password."""
-        new_user: 'CustomUser' = self.__obtain_user_instance(email, full_name, password, **kwargs)
+        """Create Custom user. TODO where is this used?"""
+        new_user: 'CustomUser' = self.__obtain_user_instance(
+            email=email,
+            full_name=full_name,
+            password=password,
+            **kwargs,
+        )
         new_user.set_password(password)
         new_user.save(using=self._db)
         return new_user
-    
+
     def create_superuser(
         self,
         email: str,
         full_name: str,
         password: str,
-        **kwargs: dict[str, Any]
+        **kwargs: dict[str, Any],
     ) -> 'CustomUser':
-        """Create and save a superuser with the given email and password."""
-        new_user: 'CustomUser' = self.__obtain_user_instance(email, full_name, password, **kwargs)
+        """Create super user. Used by manage.py createsuperuser."""
+        new_user: 'CustomUser' = self.__obtain_user_instance(
+            email=email,
+            full_name=full_name,
+            password=password,
+            is_staff=True,
+            is_superuser=True,
+            **kwargs,
+        )
         new_user.set_password(password)
-        new_user.is_staff = True
-        new_user.is_superuser = True
         new_user.save(using=self._db)
         return new_user
 
 
-class CustomUser(AbstractBaseUser, PermissionsMixin):
+class CustomUser(AbstractBaseUser, PermissionsMixin, AbstractBaseModel):
     """
-    Custom user model for db
+    Custom user model extending AbstractBaseModel.
     """
-
-    EMAIL_MAX_LEN = 150
-    FULL_NAME_MAX_LEN = 150
-    PASSWORD_MAX_LEN = 254
-    PHONE_MAX_LEN = 20
-    CITY_MAX_LEN = 100
-    COUNTRY_MAX_LEN = 100
-    DEPARTMENT_MAX_LEN = 100
-    ROLE_MAX_LEN = 100
+    EMAIL_MAX_LENGTH = 150
+    FULL_NAME_MAX_LENGTH = 150
+    PASSWORD_MAX_LENGTH = 254
 
     email = EmailField(
-        max_length=EMAIL_MAX_LEN,
+        max_length=EMAIL_MAX_LENGTH,
         unique=True,
         db_index=True,
-        verbose_name="email address",
-        help_text="The email address of the user",
+        verbose_name="Email address",
+        help_text="User's email address",
     )
     username = CharField(
-        max_length=FULL_NAME_MAX_LEN,
-        verbose_name="username",
+        max_length=FULL_NAME_MAX_LENGTH,
+        verbose_name="Username",
     )
     full_name = CharField(
-        max_length=FULL_NAME_MAX_LEN,
-        verbose_name="full name",
+        max_length=FULL_NAME_MAX_LENGTH,
+        verbose_name="Full name",
     )
     password = CharField(
-        max_length=PASSWORD_MAX_LEN,
+        max_length=PASSWORD_MAX_LENGTH,
         validators=[validate_password],
-        verbose_name="password",
+        verbose_name="Password",
+        help_text="User's hash representation of the password",
     )
 
+    #additional info
     phone = CharField(
-        max_length=PHONE_MAX_LEN,
-        verbose_name="phone",
-        help_text="The phone number of the user",
-    )
-    city = CharField(
-        max_length=CITY_MAX_LEN,
-        verbose_name="city",
-        help_text="The city of the user",
-    )
-
-    country = CharField(
-        max_length=COUNTRY_MAX_LEN,
-        verbose_name="country",
-        help_text="The country of the user",
-    )
-
-    department = CharField(
-        max_length=DEPARTMENT_MAX_LEN,
-        verbose_name="department",
-        help_text="The department of the user",
-    )
-
-    role = CharField(
-        choices=(('admin', 'Admin'), ('manager', 'Manager'), ('employee', 'Employee')),
-        max_length=ROLE_MAX_LEN,
-    )
-    birth_date = DateField(
-        verbose_name="birth date",
-        help_text="The birth date of the user",
-    )
-    salary = DecimalField(
-        max_digits=10,
-        decimal_places=2,
+        max_length = 10,
+        verbose_name = "Phone",
         blank = True,
         null = True,
-        verbose_name="salary",
-        help_text="The salary of the user",
+    )
+    city = CharField(
+        max_length = 255,
+        blank = True,
+        null = True,
+    )
+    country = CharField(
+        max_length = 255,
+        blank = True,
+        null = True,
+    )
+    department = CharField(
+        choices = (("it", "IT"), ("hr", "HR"), ("sales", "SALES"), ("finance", "Finance")),
+        max_length = 255,
+    )
+    role = CharField(
+        choices = (("admin", "Admin"), ("manager", "Manager"), ("employee", "Employee")),
+        max_length = 255,
+    )
+    birth_date = DateField(
+        verbose_name="Birth date",
+    )
+    salary = DecimalField(
+        verbose_name="Salary",
+        null = True,
+        blank = True,
+        max_digits=10, 
+        decimal_places=3
     )
 
     is_staff = BooleanField(
         default=False,
-        verbose_name="staff status",
-        help_text="Whether the user can log into this admin site.",
+        verbose_name="Staff status",
+        help_text="True if the user is an admin and has an access to the admin panel",
     )
     is_active = BooleanField(
         default=True,
-        verbose_name="active",
-        help_text="Whether the user can log into this admin site.",
-    )
-    date_joined = DateTimeField(
-        default=timezone.now,
-        verbose_name="date joined",
-        help_text="The date and time the user joined the site.",
+        verbose_name="Active status",
+        help_text="True if the user is active and has an access to request data",
     )
 
-    last_login = DateTimeField(
-        blank=True,
-        null=True,
-        verbose_name="last login",
-        help_text="The date and time the user last logged in.",
-    )
-
-    REQUIRED_FIELDS=['full_name']
-    USERNAME_FIELD='email'
-
+    REQUIRED_FIELDS = ["full_name"]
+    USERNAME_FIELD = "email"
     objects = CustomUserManager()
 
     class Meta:
+        """Meta options for CustomUser model."""
+
         verbose_name = "Custom User"
         verbose_name_plural = "Custom Users"
-        ordering = ['-date_joined']
+        ordering = ["-created_at"]
 
     def clean(self) -> None:
-        """Clean the user data"""
+        """Validate the model instance before saving."""
         return super().clean()

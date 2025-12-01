@@ -1,4 +1,3 @@
-from time import timezone
 from typing import Any
 
 from django.db import models

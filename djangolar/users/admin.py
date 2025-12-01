@@ -14,6 +14,6 @@ class CustomUserAbstractUserAdmin(ModelAdmin):
         "is_staff",
         "is_superuser",
     )
-    list_filter = ('is_staff', 'is_superuser', 'is_active', 'date_joined')
-    search_fields = ('email', 'full_name')
-    ordering = ('-date_joined',)
+    search_fields = ("email", "full_name")
+    list_filter = ("is_active", "is_staff", "is_superuser")
+    ordering = ("email",)
